@@ -1,7 +1,7 @@
 {
   "name": "analog-clock-ios-style",
   "version": "1.0.0",
-  "description": "An analog iOS style clock react component.",
+  "description": "An analog iOS style clock react component with tailwind css",
   "keywords": [
     "ios",
     "analog",
