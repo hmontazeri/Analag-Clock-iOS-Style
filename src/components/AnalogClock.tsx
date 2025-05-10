@@ -1,0 +1,169 @@
+import React from 'react';
+
+export interface AnalogClockProps {
+  city?: string;
+  offset?: number;
+  currentTime: Date;
+  showToday?: boolean;
+  bgColor?: string;
+  textColor?: string;
+  handColor?: string;
+  accentColor?: string;
+  size?: number; // Size in pixels for the clock face
+}
+
+export const AnalogClock = ({
+  city,
+  offset = 0,
+  currentTime,
+  showToday = true,
+  bgColor: customBgColor,
+  textColor: customTextColor,
+  handColor: customHandColor,
+  accentColor: customAccentColor,
+  size = 128, // Default size of 128px (32 * 4)
+}: AnalogClockProps) => {
+  // Function to calculate adjusted time for the timezone
+  const getAdjustedTime = () => {
+    const adjustedTime = new Date(currentTime);
+    if (offset !== 0) {
+      adjustedTime.setHours(currentTime.getHours() + offset);
+    }
+    return adjustedTime;
+  };
+
+  const time = getAdjustedTime();
+  const hours = time.getHours();
+  const minutes = time.getMinutes();
+  const seconds = time.getSeconds();
+
+  // Calculate angles for clock hands with millisecond precision for smooth movement
+  const milliseconds = time.getMilliseconds();
+  const secondDegrees = ((seconds + milliseconds / 1000) / 60) * 360;
+  const minuteDegrees =
+    ((minutes + (seconds + milliseconds / 1000) / 60) / 60) * 360;
+  const hourDegrees =
+    (((hours % 12) + (minutes + (seconds + milliseconds / 1000) / 60) / 60) /
+      12) *
+    360;
+
+  // Determine if it's day or night for theming
+  const isDayTime = hours >= 6 && hours < 18;
+  const bgColor = customBgColor ?? (isDayTime ? 'bg-white' : 'bg-gray-800');
+  const textColor =
+    customTextColor ?? (isDayTime ? 'text-black' : 'text-white');
+  const handColor = customHandColor ?? (isDayTime ? '#000' : '#fff');
+  const accentColor = customAccentColor ?? '#FF9500'; // iOS orange accent color
+
+  return (
+    <div
+      className="flex flex-col items-center"
+      style={{ width: `${size * 1.5}px` }}
+    >
+      {/* Clock face */}
+      <div
+        data-testid="clock-face"
+        className={`relative ${bgColor} rounded-full flex items-center justify-center shadow-lg mb-2`}
+        style={{ width: `${size}px`, height: `${size}px` }}
+      >
+        {/* Clock numbers */}
+        {[...Array(12)].map((_, i) => {
+          const num = i + 1;
+          const angle = num * 30 - 90; // 30 degrees per hour, starting from -90 (12 o'clock)
+          const radian = (angle * Math.PI) / 180;
+          const x = 50 + 42 * Math.cos(radian);
+          const y = 50 + 42 * Math.sin(radian);
+
+          return (
+            <div
+              key={num}
+              className={`absolute font-semibold ${textColor}`}
+              style={{
+                left: `${x}%`,
+                top: `${y}%`,
+                transform: 'translate(-50%, -50%)',
+                fontSize: `${size * 0.1}px`,
+              }}
+            >
+              {num}
+            </div>
+          );
+        })}
+
+        {/* Hour hand */}
+        <div
+          data-testid="clock-hand"
+          className={`absolute rounded-full bg-${textColor} origin-bottom`}
+          style={{
+            width: `${size * 0.008}px`,
+            height: `${size * 0.25}px`,
+            bottom: '50%',
+            transform: `rotate(${hourDegrees}deg)`,
+            backgroundColor: handColor,
+          }}
+        />
+
+        {/* Minute hand */}
+        <div
+          data-testid="clock-hand"
+          className={`absolute rounded-full bg-${textColor} origin-bottom`}
+          style={{
+            width: `${size * 0.008}px`,
+            height: `${size * 0.38}px`,
+            bottom: '50%',
+            transform: `rotate(${minuteDegrees}deg)`,
+            backgroundColor: handColor,
+          }}
+        />
+
+        {/* Second hand with smooth transition */}
+        <div
+          data-testid="clock-hand"
+          className="absolute rounded-full origin-bottom"
+          style={{
+            width: `${size * 0.004}px`,
+            height: `${size * 0.4}px`,
+            bottom: '50%',
+            transform: `rotate(${secondDegrees}deg)`,
+            backgroundColor: accentColor,
+            transition: 'none',
+          }}
+        />
+
+        {/* Center dot */}
+        <div
+          data-testid="center-dot"
+          className="absolute rounded-full"
+          style={{
+            width: `${size * 0.016}px`,
+            height: `${size * 0.016}px`,
+            backgroundColor: accentColor,
+          }}
+        />
+      </div>
+
+      {/* City name and timezone */}
+      <div className="text-center">
+        {city && (
+          <h3
+            className="text-white font-medium"
+            style={{ fontSize: `${size * 0.16}px` }}
+          >
+            {city}
+          </h3>
+        )}
+        {showToday && (
+          <p className="text-gray-400" style={{ fontSize: `${size * 0.1}px` }}>
+            Today
+          </p>
+        )}
+        {offset !== 0 && (
+          <p className="text-gray-400" style={{ fontSize: `${size * 0.1}px` }}>
+            {offset >= 0 ? '+' : ''}
+            {offset}HRS
+          </p>
+        )}
+      </div>
+    </div>
+  );
+};
