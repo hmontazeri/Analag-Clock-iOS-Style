@@ -1,3 +1,5 @@
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/hmontazeri/Analag-Clock-iOS-Style/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/hmontazeri/Analag-Clock-iOS-Style/tree/main)
+
 # Analog Clock iOS Style
 
 A beautiful, customizable analog clock React component that mimics the iOS clock design. This component provides a sleek and modern look while maintaining high performance and flexibility.
