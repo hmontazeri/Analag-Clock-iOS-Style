@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export interface AnalogClockProps {
   city?: string;
@@ -23,22 +23,41 @@ export const AnalogClock = ({
   accentColor: customAccentColor,
   size = 128, // Default size of 128px (32 * 4)
 }: AnalogClockProps) => {
-  // Function to calculate adjusted time for the timezone
+  const [currentTimeState, setCurrentTimeState] = useState(new Date());
+  const animationFrameId = useRef<number | null>(null);
+
+  // Update time with smooth animation using requestAnimationFrame
+  useEffect(() => {
+    const updateClock = () => {
+      setCurrentTimeState(new Date());
+      animationFrameId.current = requestAnimationFrame(updateClock);
+    };
+
+    animationFrameId.current = requestAnimationFrame(updateClock);
+
+    // Clear animation frame on unmount
+    return () => {
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
+    };
+  }, []);
+
   const getAdjustedTime = () => {
-    const adjustedTime = new Date(currentTime);
+    const adjustedTime = new Date(currentTimeState);
     if (offset !== 0) {
-      adjustedTime.setHours(currentTime.getHours() + offset);
+      adjustedTime.setHours(currentTimeState.getHours() + offset);
     }
     return adjustedTime;
   };
 
-  const time = getAdjustedTime();
-  const hours = time.getHours();
-  const minutes = time.getMinutes();
-  const seconds = time.getSeconds();
+  const adjustedTime = getAdjustedTime();
+  const hours = adjustedTime.getHours();
+  const minutes = adjustedTime.getMinutes();
+  const seconds = adjustedTime.getSeconds();
 
   // Calculate angles for clock hands with millisecond precision for smooth movement
-  const milliseconds = time.getMilliseconds();
+  const milliseconds = adjustedTime.getMilliseconds();
   const secondDegrees = ((seconds + milliseconds / 1000) / 60) * 360;
   const minuteDegrees =
     ((minutes + (seconds + milliseconds / 1000) / 60) / 60) * 360;
@@ -48,7 +67,8 @@ export const AnalogClock = ({
     360;
 
   // Determine if it's day or night for theming
-  const isDayTime = hours >= 6 && hours < 18;
+  const propHours = currentTime.getHours();
+  const isDayTime = propHours >= 6 && propHours < 18;
   const bgColor = customBgColor ?? (isDayTime ? 'bg-white' : 'bg-gray-800');
   const textColor =
     customTextColor ?? (isDayTime ? 'text-black' : 'text-white');
