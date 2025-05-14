@@ -23,13 +23,32 @@ export const AnalogClock = ({
   accentColor: customAccentColor,
   size = 128, // Default size of 128px (32 * 4)
 }: AnalogClockProps) => {
-  const [currentTimeState, setCurrentTimeState] = useState(new Date());
+  const [currentTimeState, setCurrentTimeState] = useState(
+    new Date(currentTime),
+  );
   const animationFrameId = useRef<number | null>(null);
+  const initialTimeRef = useRef(new Date(currentTime));
+  const initialTimestampRef = useRef(performance.now());
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   // Update time with smooth animation using requestAnimationFrame
   useEffect(() => {
+    // Reset refs when currentTime prop changes
+    initialTimeRef.current = new Date(currentTime);
+    initialTimestampRef.current = performance.now();
+    setCurrentTimeState(new Date(currentTime)); // Ensure immediate update to new prop time
+
     const updateClock = () => {
-      setCurrentTimeState(new Date());
+      const elapsedMilliseconds =
+        performance.now() - initialTimestampRef.current;
+      const newDisplayTime = new Date(
+        initialTimeRef.current.getTime() + elapsedMilliseconds,
+      );
+      setCurrentTimeState(newDisplayTime);
       animationFrameId.current = requestAnimationFrame(updateClock);
     };
 
@@ -41,7 +60,7 @@ export const AnalogClock = ({
         cancelAnimationFrame(animationFrameId.current);
       }
     };
-  }, []);
+  }, [currentTime]); // Rerun effect if currentTime prop changes
 
   const getAdjustedTime = () => {
     const adjustedTime = new Date(currentTimeState);
@@ -74,6 +93,10 @@ export const AnalogClock = ({
     customTextColor ?? (isDayTime ? 'text-black' : 'text-white');
   const handColor = customHandColor ?? (isDayTime ? '#000' : '#fff');
   const accentColor = customAccentColor ?? '#FF9500'; // iOS orange accent color
+
+  if (!isClient) {
+    return '';
+  }
 
   return (
     <div
@@ -115,7 +138,7 @@ export const AnalogClock = ({
           data-testid="clock-hand"
           className={`absolute rounded-full bg-${textColor} origin-bottom`}
           style={{
-            width: `${size * 0.008}px`,
+            width: `${size * 0.01}px`,
             height: `${size * 0.25}px`,
             bottom: '50%',
             transform: `rotate(${hourDegrees}deg)`,
@@ -128,7 +151,7 @@ export const AnalogClock = ({
           data-testid="clock-hand"
           className={`absolute rounded-full bg-${textColor} origin-bottom`}
           style={{
-            width: `${size * 0.008}px`,
+            width: `${size * 0.01}px`,
             height: `${size * 0.38}px`,
             bottom: '50%',
             transform: `rotate(${minuteDegrees}deg)`,
@@ -141,7 +164,7 @@ export const AnalogClock = ({
           data-testid="clock-hand"
           className="absolute rounded-full origin-bottom"
           style={{
-            width: `${size * 0.004}px`,
+            width: `${size * 0.005}px`,
             height: `${size * 0.4}px`,
             bottom: '50%',
             transform: `rotate(${secondDegrees}deg)`,
@@ -155,8 +178,8 @@ export const AnalogClock = ({
           data-testid="center-dot"
           className="absolute rounded-full"
           style={{
-            width: `${size * 0.016}px`,
-            height: `${size * 0.016}px`,
+            width: `${size * 0.02}px`,
+            height: `${size * 0.02}px`,
             backgroundColor: accentColor,
           }}
         />
