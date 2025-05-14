@@ -11,4 +11,7 @@ export default defineConfig({
   esbuildOptions(options) {
     options.jsx = 'automatic';
   },
+  loader: {
+    '.css': 'copy',
+  },
 });
