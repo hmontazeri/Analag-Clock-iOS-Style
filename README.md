@@ -6,7 +6,7 @@ A beautiful, customizable analog clock React component that mimics the iOS clock
 
 Check out the DEMO [here](https://analog-clock-pink-ten.vercel.app/)
 
-![Analog Clock iOS Style](ios-analog-clock.png)
+![Analog Clock iOS Style](demo.png)
 
 ## Features
 
