@@ -5,10 +5,10 @@ export interface AnalogClockProps {
   offset?: number;
   currentTime: Date;
   showToday?: boolean;
-  bgColor?: string;
-  textColor?: string;
-  handColor?: string;
-  accentColor?: string;
+  bgColorClassName?: string;
+  textColorClassName?: string;
+  handColorHex?: string;
+  accentColorHex?: string;
   size?: number; // Size in pixels for the clock face
 }
 
@@ -17,10 +17,10 @@ export const AnalogClock = ({
   offset = 0,
   currentTime,
   showToday = true,
-  bgColor: customBgColor,
-  textColor: customTextColor,
-  handColor: customHandColor,
-  accentColor: customAccentColor,
+  bgColorClassName,
+  textColorClassName,
+  handColorHex,
+  accentColorHex,
   size = 128, // Default size of 128px (32 * 4)
 }: AnalogClockProps) => {
   const [currentTimeState, setCurrentTimeState] = useState(
@@ -88,11 +88,11 @@ export const AnalogClock = ({
   // Determine if it's day or night for theming
   const propHours = currentTime.getHours();
   const isDayTime = propHours >= 6 && propHours < 18;
-  const bgColor = customBgColor ?? (isDayTime ? 'bg-white' : 'bg-gray-800');
+  const bgColor = bgColorClassName ?? (isDayTime ? 'bg-white' : 'bg-gray-800');
   const textColor =
-    customTextColor ?? (isDayTime ? 'text-black' : 'text-white');
-  const handColor = customHandColor ?? (isDayTime ? '#000' : '#fff');
-  const accentColor = customAccentColor ?? '#FF9500'; // iOS orange accent color
+    textColorClassName ?? (isDayTime ? 'text-black' : 'text-white');
+  const handColor = handColorHex ?? (isDayTime ? '#000' : '#fff');
+  const accentColor = accentColorHex ?? '#FF9500'; // iOS orange accent color
 
   if (!isClient) {
     return '';

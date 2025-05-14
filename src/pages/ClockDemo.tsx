@@ -23,10 +23,10 @@ const ClockDemo = () => {
             <h2 className="text-xl mb-4">Dark Theme</h2>
             <AnalogClock
               currentTime={currentTime}
-              bgColor="bg-gray-900"
-              textColor="text-white"
-              handColor="#fff"
-              accentColor="#FF9500"
+              bgColorClassName="bg-gray-900"
+              textColorClassName="text-white"
+              handColorHex="#fff"
+              accentColorHex="#FF9500"
             />
           </div>
 
@@ -35,10 +35,10 @@ const ClockDemo = () => {
             <h2 className="text-xl mb-4">Custom Theme</h2>
             <AnalogClock
               currentTime={currentTime}
-              bgColor="bg-purple-900"
-              textColor="text-pink-200"
-              handColor="#FF69B4"
-              accentColor="#00FF00"
+              bgColorClassName="bg-purple-900"
+              textColorClassName="text-pink-200"
+              handColorHex="#FF69B4"
+              accentColorHex="#00FF00"
             />
           </div>
 
@@ -49,10 +49,10 @@ const ClockDemo = () => {
               currentTime={currentTime}
               city="Tokyo"
               offset={9}
-              bgColor="bg-gray-800"
-              textColor="text-white"
-              handColor="#fff"
-              accentColor="#FF9500"
+              bgColorClassName="bg-gray-800"
+              textColorClassName="text-white"
+              handColorHex="#fff"
+              accentColorHex="#FF9500"
             />
           </div>
 
@@ -62,10 +62,10 @@ const ClockDemo = () => {
             <div className="scale-150">
               <AnalogClock
                 currentTime={currentTime}
-                bgColor="bg-gray-800"
-                textColor="text-white"
-                handColor="#fff"
-                accentColor="#FF9500"
+                bgColorClassName="bg-gray-800"
+                textColorClassName="text-white"
+                handColorHex="#fff"
+                accentColorHex="#FF9500"
               />
             </div>
           </div>
@@ -76,10 +76,10 @@ const ClockDemo = () => {
             <div className="scale-75">
               <AnalogClock
                 currentTime={currentTime}
-                bgColor="bg-gray-800"
-                textColor="text-white"
-                handColor="#fff"
-                accentColor="#FF9500"
+                bgColorClassName="bg-gray-800"
+                textColorClassName="text-white"
+                handColorHex="#fff"
+                accentColorHex="#FF9500"
               />
             </div>
           </div>

@@ -37,13 +37,17 @@ describe('AnalogClock', () => {
   });
 
   it('applies custom background color when provided', () => {
-    render(<AnalogClock currentTime={mockDate} bgColor="bg-blue-500" />);
+    render(
+      <AnalogClock currentTime={mockDate} bgColorClassName="bg-blue-500" />,
+    );
     const clockFace = screen.getByTestId('clock-face');
     expect(clockFace).toHaveClass('bg-blue-500');
   });
 
   it('applies custom text color when provided', () => {
-    render(<AnalogClock currentTime={mockDate} textColor="text-red-500" />);
+    render(
+      <AnalogClock currentTime={mockDate} textColorClassName="text-red-500" />,
+    );
     const clockNumbers = screen.getAllByText(/[1-9]|1[0-2]/);
     clockNumbers.forEach((number: HTMLElement) => {
       expect(number).toHaveClass('text-red-500');
@@ -51,7 +55,7 @@ describe('AnalogClock', () => {
   });
 
   it('applies custom hand color when provided', () => {
-    render(<AnalogClock currentTime={mockDate} handColor="#FF0000" />);
+    render(<AnalogClock currentTime={mockDate} handColorHex="#FF0000" />);
     const hands = screen.getAllByTestId('clock-hand');
     hands.slice(0, 2).forEach((hand: HTMLElement) => {
       expect(hand).toHaveStyle({ backgroundColor: 'rgb(255, 0, 0)' });
@@ -59,7 +63,7 @@ describe('AnalogClock', () => {
   });
 
   it('applies custom accent color when provided', () => {
-    render(<AnalogClock currentTime={mockDate} accentColor="#00FF00" />);
+    render(<AnalogClock currentTime={mockDate} accentColorHex="#00FF00" />);
     const centerDot = screen.getByTestId('center-dot');
     expect(centerDot).toHaveStyle({ backgroundColor: '#00FF00' });
   });
