@@ -1,6 +1,6 @@
 {
   "name": "analog-clock-ios-style",
-  "version": "1.0.5",
+  "version": "1.0.9",
   "description": "An analog iOS style clock react component with tailwind css",
   "repository": "https://github.com/hmontazeri/Analag-Clock-iOS-Style",
   "keywords": [
@@ -12,20 +12,20 @@
   ],
   "license": "MIT",
   "author": "Hamed Montazeri",
-  "type": "module",
-  "types": "dist/index.d.ts",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    }
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "files": [
-    "dist",
-    "*.css"
+    "dist"
   ],
   "scripts": {
     "preinstall": "rm -rf dist",
