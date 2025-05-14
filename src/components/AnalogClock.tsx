@@ -7,8 +7,12 @@ export interface AnalogClockProps {
   showToday?: boolean;
   bgColorClassName?: string;
   textColorClassName?: string;
+  bgColorHex?: string;
+  textColorHex?: string;
   handColorHex?: string;
+  handColorClassName?: string;
   accentColorHex?: string;
+  accentColorClassName?: string;
   size?: number; // Size in pixels for the clock face
 }
 
@@ -19,8 +23,12 @@ export const AnalogClock = ({
   showToday = true,
   bgColorClassName,
   textColorClassName,
+  bgColorHex,
+  textColorHex,
   handColorHex,
+  handColorClassName,
   accentColorHex,
+  accentColorClassName,
   size = 128, // Default size of 128px (32 * 4)
 }: AnalogClockProps) => {
   const [currentTimeState, setCurrentTimeState] = useState(
@@ -91,8 +99,8 @@ export const AnalogClock = ({
   const bgColor = bgColorClassName ?? (isDayTime ? 'bg-white' : 'bg-gray-800');
   const textColor =
     textColorClassName ?? (isDayTime ? 'text-black' : 'text-white');
-  const handColor = handColorHex ?? (isDayTime ? '#000' : '#fff');
-  const accentColor = accentColorHex ?? '#FF9500'; // iOS orange accent color
+  const effectiveHandColorHex = handColorHex ?? (isDayTime ? '#000' : '#fff');
+  const effectiveAccentColorHex = accentColorHex ?? '#FF9500'; // iOS orange accent color
 
   if (!isClient) {
     return '';
@@ -136,39 +144,45 @@ export const AnalogClock = ({
         {/* Hour hand */}
         <div
           data-testid="clock-hand"
-          className={`absolute rounded-full bg-${textColor} origin-bottom`}
+          className={`absolute rounded-full origin-bottom ${handColorClassName ?? ''}`}
           style={{
             width: `${size * 0.01}px`,
             height: `${size * 0.25}px`,
             bottom: '50%',
             transform: `rotate(${hourDegrees}deg)`,
-            backgroundColor: handColor,
+            ...(handColorClassName
+              ? {}
+              : { backgroundColor: effectiveHandColorHex }),
           }}
         />
 
         {/* Minute hand */}
         <div
           data-testid="clock-hand"
-          className={`absolute rounded-full bg-${textColor} origin-bottom`}
+          className={`absolute rounded-full origin-bottom ${handColorClassName ?? ''}`}
           style={{
             width: `${size * 0.01}px`,
             height: `${size * 0.38}px`,
             bottom: '50%',
             transform: `rotate(${minuteDegrees}deg)`,
-            backgroundColor: handColor,
+            ...(handColorClassName
+              ? {}
+              : { backgroundColor: effectiveHandColorHex }),
           }}
         />
 
         {/* Second hand with smooth transition */}
         <div
           data-testid="clock-hand"
-          className="absolute rounded-full origin-bottom"
+          className={`absolute rounded-full origin-bottom ${accentColorClassName ?? ''}`}
           style={{
             width: `${size * 0.005}px`,
             height: `${size * 0.4}px`,
             bottom: '50%',
             transform: `rotate(${secondDegrees}deg)`,
-            backgroundColor: accentColor,
+            ...(accentColorClassName
+              ? {}
+              : { backgroundColor: effectiveAccentColorHex }),
             transition: 'none',
           }}
         />
@@ -176,11 +190,13 @@ export const AnalogClock = ({
         {/* Center dot */}
         <div
           data-testid="center-dot"
-          className="absolute rounded-full"
+          className={`absolute rounded-full ${accentColorClassName ?? ''}`}
           style={{
             width: `${size * 0.02}px`,
             height: `${size * 0.02}px`,
-            backgroundColor: accentColor,
+            ...(accentColorClassName
+              ? {}
+              : { backgroundColor: effectiveAccentColorHex }),
           }}
         />
       </div>

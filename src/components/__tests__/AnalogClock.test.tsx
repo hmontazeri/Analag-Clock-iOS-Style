@@ -54,18 +54,54 @@ describe('AnalogClock', () => {
     });
   });
 
-  it('applies custom hand color when provided', () => {
+  it('applies custom hand color when provided via handColorHex', () => {
     render(<AnalogClock currentTime={mockDate} handColorHex="#FF0000" />);
     const hands = screen.getAllByTestId('clock-hand');
     hands.slice(0, 2).forEach((hand: HTMLElement) => {
       expect(hand).toHaveStyle({ backgroundColor: 'rgb(255, 0, 0)' });
+      expect(hand.classList.length).toBe(3); // absolute, rounded-full, origin-bottom
     });
   });
 
-  it('applies custom accent color when provided', () => {
+  it('applies custom hand color class when provided via handColorClassName', () => {
+    render(
+      <AnalogClock
+        currentTime={mockDate}
+        handColorClassName="bg-custom-hand"
+      />,
+    );
+    const hands = screen.getAllByTestId('clock-hand');
+    hands.slice(0, 2).forEach((hand: HTMLElement) => {
+      expect(hand).toHaveClass('bg-custom-hand');
+      expect(hand.style.backgroundColor).toBe('');
+    });
+  });
+
+  it('applies custom accent color when provided via accentColorHex', () => {
     render(<AnalogClock currentTime={mockDate} accentColorHex="#00FF00" />);
+    const secondHand = screen.getAllByTestId('clock-hand')[2];
+    expect(secondHand).toHaveStyle({ backgroundColor: '#00FF00' });
+    expect(secondHand.classList.length).toBe(3); // absolute, rounded-full, origin-bottom
+
     const centerDot = screen.getByTestId('center-dot');
     expect(centerDot).toHaveStyle({ backgroundColor: '#00FF00' });
+    expect(centerDot.classList.length).toBe(2); // absolute, rounded-full
+  });
+
+  it('applies custom accent color class when provided via accentColorClassName', () => {
+    render(
+      <AnalogClock
+        currentTime={mockDate}
+        accentColorClassName="bg-custom-accent"
+      />,
+    );
+    const secondHand = screen.getAllByTestId('clock-hand')[2];
+    expect(secondHand).toHaveClass('bg-custom-accent');
+    expect(secondHand.style.backgroundColor).toBe('');
+
+    const centerDot = screen.getByTestId('center-dot');
+    expect(centerDot).toHaveClass('bg-custom-accent');
+    expect(centerDot.style.backgroundColor).toBe('');
   });
 
   it('displays all clock numbers from 1 to 12', () => {
