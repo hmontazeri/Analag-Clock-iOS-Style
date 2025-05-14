@@ -118,19 +118,19 @@ describe('AnalogClock', () => {
 
       // Hour hand
       expect(hands[0]).toHaveStyle({
-        width: '1.6px', // 200 * 0.008
+        width: '2px', // 200 * 0.01
         height: '50px', // 200 * 0.25
       });
 
       // Minute hand
       expect(hands[1]).toHaveStyle({
-        width: '1.6px', // 200 * 0.008
+        width: '2px', // 200 * 0.01
         height: '76px', // 200 * 0.38
       });
 
       // Second hand
       expect(hands[2]).toHaveStyle({
-        width: '0.8px', // 200 * 0.004
+        width: '1px', // 200 * 0.005
         height: '80px', // 200 * 0.4
       });
     });
@@ -139,8 +139,8 @@ describe('AnalogClock', () => {
       render(<AnalogClock currentTime={mockDate} size={200} />);
       const centerDot = screen.getByTestId('center-dot');
       expect(centerDot).toHaveStyle({
-        width: '3.2px', // 200 * 0.016
-        height: '3.2px', // 200 * 0.016
+        width: '4px', // 200 * 0.02
+        height: '4px', // 200 * 0.02
       });
     });
 
